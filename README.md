@@ -1,6 +1,7 @@
 # Doku Python SDK - dokumetry
 
 [![Doku Python Package](https://img.shields.io/badge/Doku-orange)](https://github.com/dokulabs/doku)
+[![Documentation](https://img.shields.io/badge/Documentation-orange?logo=Google-Docs&logoColor=white)](https://dokulabs.mintlify.app/0.0.4/dokumetry/python/intro)
 [![License](https://img.shields.io/github/license/dokulabs/dokumetry-python?label=license&logo=github&color=f80&logoColor=fff%22%20alt=%22License)](https://github.com/dokulabs/dokumetry-python/blob/main/LICENSE)
 [![Downloads](https://static.pepy.tech/badge/dokumetry/month)](https://pepy.tech/project/dokumetry)
 [![Library Version](https://img.shields.io/github/tag/dokulabs/dokumetry-python.svg?&label=Library%20Version&logo=python)](https://github.com/dokulabs/dokumetry-python/tags)
