@@ -15,7 +15,7 @@ def count_tokens(text):
     Returns:
         int: The number of tokens in the text.
     """
-    tokens_per_word = 2.5
+    tokens_per_word = 1.5
 
     # Split the text into words
     words = text.split()
@@ -203,7 +203,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             model = kwargs.get('model', "command")
             prompt = kwargs.get('message')
             data = {
-                "llmReqId": response.generation_id,
+                "llmReqId": response.response_id,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
