@@ -64,7 +64,6 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 for event in original_generate(*args, **kwargs):
                     accumulated_content += event.text
                     yield event
-
                 end_time = time.time()
                 duration = end_time - start_time
                 prompt = kwargs.get('prompt')
@@ -96,6 +95,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
 
             for generation in response:
                 data = {
+                    "llmReqId": generation.id,
                     "environment": environment,
                     "applicationName": application_name,
                     "sourceLanguage": "python",
@@ -168,14 +168,16 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             def stream_generator():
                 accumulated_content = ""
                 for event in original_chat(*args, **kwargs):
+                    if event.event_type == "stream-start":
+                        responseId = event.generation_id
                     if event.event_type == "text-generation":
                         accumulated_content += event.text
                     yield event
-
                 end_time = time.time()
                 duration = end_time - start_time
                 prompt = kwargs.get('message')
                 data = {
+                    "llmReqId": responseId,
                     "environment": environment,
                     "applicationName": application_name,
                     "sourceLanguage": "python",
@@ -201,6 +203,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             model = kwargs.get('model', "command")
             prompt = kwargs.get('message')
             data = {
+                "llmReqId": response.generation_id,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
@@ -239,6 +242,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         prompt = kwargs.get('text')
 
         data = {
+                "llmReqId": response.id,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",

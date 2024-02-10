@@ -53,6 +53,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                         if content:
                             accumulated_content += content
                     yield chunk
+                    responseId = chunk.id
                 end_time = time.time()
                 duration = end_time - start_time
                 message_prompt = kwargs.get('messages', "No prompt provided")
@@ -74,6 +75,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
 
                 prompt = "\n".join(formatted_messages)
                 data = {
+                    "llmReqId": responseId,
                     "environment": environment,
                     "applicationName": application_name,
                     "sourceLanguage": "python",
@@ -114,6 +116,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             prompt = "\n".join(formatted_messages)
 
             data = {
+                "llmReqId": response.id,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
@@ -172,10 +175,12 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                         if content:
                             accumulated_content += content
                     yield chunk
+                    responseId = chunk.id
                 end_time = time.time()
                 duration = end_time - start_time
                 prompt = kwargs.get('prompt', "No prompt provided")
                 data = {
+                    "llmReqId": responseId,
                     "environment": environment,
                     "applicationName": application_name,
                     "sourceLanguage": "python",
@@ -199,6 +204,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             prompt = kwargs.get('prompt', "No prompt provided")
 
             data = {
+                "llmReqId": response.id,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
@@ -296,7 +302,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             "skipResp": skip_resp,
             "requestDuration": duration,
             "model": model,
-            "finetuneJobId": response.id,
+            "llmReqId": response.id,
             "finetuneJobStatus": response.status,
         }
 
@@ -339,6 +345,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
 
         for items in response.data:
             data = {
+                "llmReqId": response.created,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
@@ -387,6 +394,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         for items in response.data:
 
             data = {
+                "llmReqId": response.created,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",

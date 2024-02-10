@@ -45,6 +45,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         completion_tokens = llm.count_tokens(response.completion)
 
         data = {
+                "llmReqId": response.id,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
