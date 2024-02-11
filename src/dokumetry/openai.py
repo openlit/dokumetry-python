@@ -117,10 +117,10 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
 
             data = {
                 "llmReqId": response.id,
+                "endpoint": "openai.chat.completions",
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
-                "endpoint": "openai.chat.completions",
                 "skipResp": skip_resp,
                 "requestDuration": duration,
                 "model": model,
@@ -180,11 +180,11 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 duration = end_time - start_time
                 prompt = kwargs.get('prompt', "No prompt provided")
                 data = {
+                    "endpoint": "openai.completions",
                     "llmReqId": response_id,
                     "environment": environment,
                     "applicationName": application_name,
                     "sourceLanguage": "python",
-                    "endpoint": "openai.completions",
                     "skipResp": skip_resp,
                     "requestDuration": duration,
                     "model": kwargs.get('model', "No Model provided"),
