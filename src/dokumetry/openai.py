@@ -53,6 +53,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                         if content:
                             accumulated_content += content
                     yield chunk
+                    response_id = chunk.id
                 end_time = time.time()
                 duration = end_time - start_time
                 message_prompt = kwargs.get('messages', "No prompt provided")
@@ -75,6 +76,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 prompt = "\n".join(formatted_messages)
                 data = {
                     "environment": environment,
+                    "llmReqId": response_id,
                     "applicationName": application_name,
                     "sourceLanguage": "python",
                     "endpoint": "openai.chat.completions",
@@ -114,10 +116,11 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             prompt = "\n".join(formatted_messages)
 
             data = {
+                "llmReqId": response.id,
+                "endpoint": "openai.chat.completions",
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
-                "endpoint": "openai.chat.completions",
                 "skipResp": skip_resp,
                 "requestDuration": duration,
                 "model": model,
@@ -172,14 +175,16 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                         if content:
                             accumulated_content += content
                     yield chunk
+                    response_id = chunk.id
                 end_time = time.time()
                 duration = end_time - start_time
                 prompt = kwargs.get('prompt', "No prompt provided")
                 data = {
+                    "endpoint": "openai.completions",
+                    "llmReqId": response_id,
                     "environment": environment,
                     "applicationName": application_name,
                     "sourceLanguage": "python",
-                    "endpoint": "openai.completions",
                     "skipResp": skip_resp,
                     "requestDuration": duration,
                     "model": kwargs.get('model', "No Model provided"),
@@ -201,6 +206,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             data = {
                 "environment": environment,
                 "applicationName": application_name,
+                "llmReqId": response.id,
                 "sourceLanguage": "python",
                 "endpoint": "openai.completions",
                 "skipResp": skip_resp,
@@ -296,7 +302,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             "skipResp": skip_resp,
             "requestDuration": duration,
             "model": model,
-            "finetuneJobId": response.id,
+            "llmReqId": response.id,
             "finetuneJobStatus": response.status,
         }
 
@@ -339,6 +345,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
 
         for items in response.data:
             data = {
+                "llmReqId": response.created,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
@@ -387,6 +394,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         for items in response.data:
 
             data = {
+                "llmReqId": response.created,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
