@@ -169,7 +169,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 accumulated_content = ""
                 for event in original_chat(*args, **kwargs):
                     if event.event_type == "stream-start":
-                        responseId = event.generation_id
+                        response_id = event.generation_id
                     if event.event_type == "text-generation":
                         accumulated_content += event.text
                     yield event
@@ -177,7 +177,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 duration = end_time - start_time
                 prompt = kwargs.get('message')
                 data = {
-                    "llmReqId": responseId,
+                    "llmReqId": response_id,
                     "environment": environment,
                     "applicationName": application_name,
                     "sourceLanguage": "python",
@@ -242,9 +242,9 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         prompt = kwargs.get('text')
 
         data = {
+                "applicationName": application_name,
                 "llmReqId": response.id,
                 "environment": environment,
-                "applicationName": application_name,
                 "sourceLanguage": "python",
                 "endpoint": "cohere.summarize",
                 "skipResp": skip_resp,

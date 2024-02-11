@@ -53,7 +53,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                         if content:
                             accumulated_content += content
                     yield chunk
-                    responseId = chunk.id
+                    response_id = chunk.id
                 end_time = time.time()
                 duration = end_time - start_time
                 message_prompt = kwargs.get('messages', "No prompt provided")
@@ -75,8 +75,8 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
 
                 prompt = "\n".join(formatted_messages)
                 data = {
-                    "llmReqId": responseId,
                     "environment": environment,
+                    "llmReqId": response_id,
                     "applicationName": application_name,
                     "sourceLanguage": "python",
                     "endpoint": "openai.chat.completions",
@@ -175,12 +175,12 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                         if content:
                             accumulated_content += content
                     yield chunk
-                    responseId = chunk.id
+                    response_id = chunk.id
                 end_time = time.time()
                 duration = end_time - start_time
                 prompt = kwargs.get('prompt', "No prompt provided")
                 data = {
-                    "llmReqId": responseId,
+                    "llmReqId": response_id,
                     "environment": environment,
                     "applicationName": application_name,
                     "sourceLanguage": "python",
