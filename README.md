@@ -12,7 +12,7 @@
 [![Pylint](https://github.com/dokulabs/dokumetry-python/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/dokulabs/dokumetry-python/actions/workflows/pylint.yml)
 [![CodeQL](https://github.com/dokulabs/dokumetry-python/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/dokulabs/dokumetry-python/actions/workflows/github-code-scanning/codeql)
 
-[Doku Python SDK](www.pypi.org/project/dokumetry/) (`dokumetry`) empowers you to effortlessly track and monitor language learning model (LLM) usage data and metrics from your Python code. It seamlessly integrates with major LLM Platforms:
+[Doku Python SDK](https://pypi.org/project/dokumetry/) (`dokumetry`) empowers you to effortlessly track and monitor language learning model (LLM) usage data and metrics from your Python code. It seamlessly integrates with major LLM Platforms:
 
  - ✅ OpenAI
  - ✅ Anthropic
