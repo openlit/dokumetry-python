@@ -86,6 +86,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 send_data(data, doku_url, api_key)
 
             return stream_generator()
+        # pylint disable=no-else-return
         else:
             start_time = time.time()
             response = original_messages_create(*args, **kwargs)
@@ -134,6 +135,5 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             send_data(data, doku_url, api_key)
 
             return response
-        
-    
+
     llm.messages.create = patched_messages_create
