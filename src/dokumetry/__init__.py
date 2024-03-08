@@ -3,8 +3,10 @@ __init__ module for dokumetry package.
 """
 
 from .openai import init as init_openai
+from .async_openai import init as init_async_openai
 from .anthropic import init as init_anthropic
 from .cohere import init as init_cohere
+from openai import AsyncOpenAI, OpenAI
 
 # pylint: disable=too-few-public-methods
 class DokuConfig:
@@ -41,8 +43,11 @@ def init(llm, doku_url, api_key, environment="default", application_name="defaul
     DokuConfig.skip_resp = skip_resp
 
     # pylint: disable=no-else-return, line-too-long
-    if hasattr(llm.chat, 'completions') and callable(llm.chat.completions.create) and ('.openai.azure.com/' not in str(llm.base_url)):
-        init_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
+    if hasattr(llm, 'chat') and callable(llm.chat.completions.create) and ('.openai.azure.com/' not in str(llm.base_url)):
+        if isinstance(llm, OpenAI):
+            init_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
+        elif isinstance(llm, AsyncOpenAI):
+            init_async_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
         return
     # pylint: disable=no-else-return
     elif hasattr(llm, 'generate') and callable(llm.generate):
