@@ -4,7 +4,9 @@ __init__ module for dokumetry package.
 
 from .openai import init as init_openai
 from .anthropic import init as init_anthropic
+from .async_anthropic import init as init_async_anthropic
 from .cohere import init as init_cohere
+from anthropic import AsyncAnthropic, Anthropic
 
 # pylint: disable=too-few-public-methods
 class DokuConfig:
@@ -49,5 +51,9 @@ def init(llm, doku_url, api_key, environment="default", application_name="defaul
         init_cohere(llm, doku_url, api_key, environment, application_name, skip_resp)
         return
     elif hasattr(llm, 'messages') and callable(llm.messages.create):
-        init_anthropic(llm, doku_url, api_key, environment, application_name, skip_resp)
+        if isinstance(llm, AsyncAnthropic):
+            init_async_anthropic(llm, doku_url, api_key, environment, application_name, skip_resp)
+        elif isinstance(llm, Anthropic):
+            init_anthropic(llm, doku_url, api_key, environment, application_name, skip_resp)
+
         return
