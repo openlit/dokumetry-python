@@ -1,12 +1,12 @@
 """
 __init__ module for dokumetry package.
 """
+from anthropic import AsyncAnthropic, Anthropic
 
 from .openai import init as init_openai
 from .anthropic import init as init_anthropic
 from .async_anthropic import init as init_async_anthropic
 from .cohere import init as init_cohere
-from anthropic import AsyncAnthropic, Anthropic
 
 # pylint: disable=too-few-public-methods
 class DokuConfig:

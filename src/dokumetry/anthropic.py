@@ -22,6 +22,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
 
     original_messages_create = llm.messages.create
 
+    #pylint: disable=too-many-locals
     def patched_messages_create(*args, **kwargs):
         """
         Patched version of Anthropic's messages.create method.
@@ -35,6 +36,8 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         """
         streaming = kwargs.get('stream', False)
         start_time = time.time()
+
+        # pylint: disable=no-else-return
         if streaming:
             def stream_generator():
                 accumulated_content = ""
@@ -86,7 +89,6 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 send_data(data, doku_url, api_key)
 
             return stream_generator()
-        # pylint disable=no-else-return
         else:
             start_time = time.time()
             response = original_messages_create(*args, **kwargs)

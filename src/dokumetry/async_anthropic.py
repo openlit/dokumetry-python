@@ -22,6 +22,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
 
     original_messages_create = llm.messages.create
 
+    #pylint: disable=too-many-locals
     async def patched_messages_create(*args, **kwargs):
         """
         Patched version of Anthropic's messages.create method.
