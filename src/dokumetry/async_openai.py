@@ -273,8 +273,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             "totalTokens": response.usage.total_tokens
         }
 
-        print(data)
-        #send_data(data, doku_url, api_key)
+        send_data(data, doku_url, api_key)
 
         return response
 
@@ -308,8 +307,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             "finetuneJobStatus": response.status,
         }
 
-        print(data)
-        #send_data(data, doku_url, api_key)
+        send_data(data, doku_url, api_key)
 
         return response
 
@@ -363,8 +361,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 "image": getattr(items, image)
             }
 
-            print(data)
-            #send_data(data, doku_url, api_key)
+            send_data(data, doku_url, api_key)
 
         return response
 
@@ -412,8 +409,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 "image": getattr(items, image)
             }
 
-            print(data)
-            #send_data(data, doku_url, api_key)
+            send_data(data, doku_url, api_key)
 
         return response
 
@@ -448,9 +444,8 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             "prompt": prompt,
             "audioVoice": voice,
         }
-        
-        print(data)
-        #send_data(data, doku_url, api_key)
+
+        send_data(data, doku_url, api_key)
 
         return response
 

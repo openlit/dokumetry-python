@@ -2,11 +2,12 @@
 __init__ module for dokumetry package.
 """
 
+from openai import AsyncOpenAI, OpenAI
+
 from .openai import init as init_openai
 from .async_openai import init as init_async_openai
 from .anthropic import init as init_anthropic
 from .cohere import init as init_cohere
-from openai import AsyncOpenAI, OpenAI
 
 # pylint: disable=too-few-public-methods
 class DokuConfig:
