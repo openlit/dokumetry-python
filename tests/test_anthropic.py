@@ -50,4 +50,3 @@ def test_messages():
         model="claude-3-opus-20240229",
     )
     assert message.type == 'message'
-
