@@ -133,6 +133,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                     "finishReason": response.stop_reason,
                     "response": response.content[0].text
             }
+            data["totalTokens"] = data["completionTokens"] + data["promptTokens"]
 
             send_data(data, doku_url, api_key)
 
