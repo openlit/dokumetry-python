@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dokumetry"
-version = "0.0.5"
+version = "0.0.6"
 description = "A Python library for tracking LLM and GenAI usage and sending the usage data to Doku"
 authors = ["Doku Labs"]
 repository = "https://github.com/dokulabs/dokumetry-python"
