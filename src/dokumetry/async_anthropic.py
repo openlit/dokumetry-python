@@ -6,7 +6,7 @@ Module for monitoring Anthropic API calls.
 import time
 from .__helpers import send_data
 
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments,too-many-statements
 def init(llm, doku_url, api_key, environment, application_name, skip_resp):
     """
     Initialize Anthropic integration with Doku.
@@ -23,7 +23,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
     original_messages_create = llm.messages.create
 
     #pylint: disable=too-many-locals
-    def patched_messages_create(*args, **kwargs):
+    async def patched_messages_create(*args, **kwargs):
         """
         Patched version of Anthropic's messages.create method.
 
@@ -36,12 +36,11 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         """
         streaming = kwargs.get('stream', False)
         start_time = time.time()
-
-        # pylint: disable=no-else-return
+        #pylint: disable=no-else-return
         if streaming:
-            def stream_generator():
+            async def stream_generator():
                 accumulated_content = ""
-                for event in original_messages_create(*args, **kwargs):
+                async for event in await original_messages_create(*args, **kwargs):
                     if event.type == "message_start":
                         response_id = event.message.id
                         prompt_tokens = event.message.usage.input_tokens
@@ -91,7 +90,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             return stream_generator()
         else:
             start_time = time.time()
-            response = original_messages_create(*args, **kwargs)
+            response = await original_messages_create(*args, **kwargs)
             end_time = time.time()
             duration = end_time - start_time
             message_prompt = kwargs.get('messages', "No prompt provided")

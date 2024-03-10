@@ -1,12 +1,14 @@
 """
 __init__ module for dokumetry package.
 """
+from anthropic import AsyncAnthropic, Anthropic
 
 from openai import AsyncOpenAI, OpenAI
 
 from .openai import init as init_openai
 from .async_openai import init as init_async_openai
 from .anthropic import init as init_anthropic
+from .async_anthropic import init as init_async_anthropic
 from .cohere import init as init_cohere
 
 # pylint: disable=too-few-public-methods
@@ -54,6 +56,10 @@ def init(llm, doku_url, api_key, environment="default", application_name="defaul
     elif hasattr(llm, 'generate') and callable(llm.generate):
         init_cohere(llm, doku_url, api_key, environment, application_name, skip_resp)
         return
-    elif hasattr(llm, 'count_tokens') and callable(llm.count_tokens):
-        init_anthropic(llm, doku_url, api_key, environment, application_name, skip_resp)
+    elif hasattr(llm, 'messages') and callable(llm.messages.create):
+        if isinstance(llm, AsyncAnthropic):
+            init_async_anthropic(llm, doku_url, api_key, environment, application_name, skip_resp)
+        elif isinstance(llm, Anthropic):
+            init_anthropic(llm, doku_url, api_key, environment, application_name, skip_resp)
+
         return
