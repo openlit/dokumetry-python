@@ -4,9 +4,10 @@
 [![Documentation](https://img.shields.io/badge/Documentation-orange?logo=Google-Docs&logoColor=white)](https://docs.dokulabs.com/)
 [![License](https://img.shields.io/github/license/dokulabs/dokumetry-python?label=license&logo=github&color=f80&logoColor=fff%22%20alt=%22License)](https://github.com/dokulabs/dokumetry-python/blob/main/LICENSE)
 [![Downloads](https://static.pepy.tech/badge/dokumetry/month)](https://pepy.tech/project/dokumetry)
-[![Library Version](https://img.shields.io/github/tag/dokulabs/dokumetry-python.svg?&label=Library%20Version&logo=python)](https://github.com/dokulabs/dokumetry-python/tags)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/dokulabs/dokumetry-python)](https://github.com/dokulabs/dokumetry-python/pulse)
 [![GitHub Contributors](https://img.shields.io/github/contributors/dokulabs/dokumetry-python)](https://github.com/dokulabs/dokumetry-python/graphs/contributors)
+
+[![Library Version](https://img.shields.io/github/tag/dokulabs/dokumetry-python.svg?&label=Library%20Version&logo=python)](https://github.com/dokulabs/dokumetry-python/tags)
 
 [![Tests](https://github.com/dokulabs/dokumetry-python/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/dokulabs/dokumetry-python/actions/workflows/tests.yml)
 [![Pylint](https://github.com/dokulabs/dokumetry-python/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/dokulabs/dokumetry-python/actions/workflows/pylint.yml)
@@ -46,14 +47,14 @@ client = OpenAI(
     api_key="YOUR_OPENAI_KEY"
 )
 
-# Pass the above `client` object along with your Doku URL and API key and this will make sure that all OpenAI calls are automatically tracked.
-dokumetry.init(llm=client, doku_url="YOUR_DOKU_URL", api_key="YOUR_DOKU_TOKEN")
+# Pass the above `client` object along with your Doku Ingester URL and API key and this will make sure that all OpenAI calls are automatically tracked.
+dokumetry.init(llm=client, doku_url="YOUR_INGESTER_DOKU_URL", api_key="YOUR_DOKU_TOKEN")
 
 chat_completion = client.chat.completions.create(
     messages=[
         {
             "role": "user",
-            "content": "What is LLM OBservability and Monitoring?",
+            "content": "What is LLM Observability and Monitoring?",
         }
     ],
     model="gpt-3.5-turbo",
@@ -71,15 +72,15 @@ client = Anthropic(
   api_key="YOUR_ANTHROPIC_API_KEY",
 )
 
-# Pass the above `client` object along with your DOKU URL and API key and this will make sure that all Anthropic calls are automatically tracked.
-dokumetry.init(llm=client, doku_url="YOUR_DOKU_URL", api_key="YOUR_DOKU_TOKEN")
+# Pass the above `client` object along with your Doku Ingester URL and API key and this will make sure that all Anthropic calls are automatically tracked.
+dokumetry.init(llm=client, doku_url="YOUR_INGESTER_DOKU_URL", api_key="YOUR_DOKU_TOKEN")
 
 message = client.messages.create(
   max_tokens=1024,
   messages=[
       {
           "role": "user",
-          "content": "What is LLM OBservability and Monitoring?",
+          "content": "What is LLM Observability and Monitoring?",
       }
   ],
   model="claude-3-opus-20240229",
@@ -97,11 +98,11 @@ import dokumetry
 # initialize the Cohere Client with an API Key
 co = cohere.Client('YOUR_COHERE_API_KEY')
 
-# Pass the above `co` object along with your Doku URL and API key and this will make sure that all Cohere calls are automatically tracked.
-dokumetry.init(llm=co, doku_url="YOUR_DOKU_URL", api_key="YOUR_DOKU_TOKEN")
+# Pass the above `co` object along with your Doku Ingester URL and API key and this will make sure that all Cohere calls are automatically tracked.
+dokumetry.init(llm=co, doku_url="YOUR_INGESTER_DOKU_URL", api_key="YOUR_DOKU_TOKEN")
 
 # generate a prediction for a prompt
-prediction = co.chat(message='What is LLM OBservability and Monitoring?', model='command')
+prediction = co.chat(message='What is LLM Observability and Monitoring?', model='command')
 
 # print the predicted text
 print(f'Chatbot: {prediction.text}')
