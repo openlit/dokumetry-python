@@ -12,33 +12,29 @@
 [![Pylint](https://github.com/dokulabs/dokumetry-python/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/dokulabs/dokumetry-python/actions/workflows/pylint.yml)
 [![CodeQL](https://github.com/dokulabs/dokumetry-python/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/dokulabs/dokumetry-python/actions/workflows/github-code-scanning/codeql)
 
-[Doku Python SDK](https://pypi.org/project/dokumetry/) (`dokumetry`) empowers you to effortlessly track and monitor language learning model (LLM) usage data and metrics from your Python code. It seamlessly integrates with major LLM Platforms:
+[Doku Python SDK](https://pypi.org/project/dokumetry/) (`dokumetry`) is your workhorse for collecting and transmitting language learning model (LLM) usage data and metrics with zero added latency. Simplicity is at the core of `dokumetry`, enabling you to kickstart comprehensive LLM observability with just two lines of code. It’s designed to blend seamlessly into your projects, supporting integration with leading LLM platforms:
 
- - ✅ OpenAI
- - ✅ Anthropic
- - ✅ Cohere
+- ✅ OpenAI
+- ✅ Anthropic
+- ✅ Cohere
 
-All LLM observability usage data is sent directly to the Doku Platform for streamlined tracking. Get started with Doku Python SDK for simplified and effective observability.
+Deployed as the backbone for all your LLM monitoring needs, `dokumetry` channels crucial usage data directly to Doku, streamlining the tracking process. Unlock efficient and effective observability for your LLM applications with DokuMetry.
 
-## Features
+## 🔥 Features
 
-- **User-friendly UI Logs:** Log all your LLM requests in just two lines of code.
+- **Effortless Integration:** With `dokumetry`, observability comes easy. Elevate your LLM observability by integrating this powerhouse into your projects using just two lines of code. 
 
-- **Cost and Latency Tracking:** Track costs and latencies based on users and custom properties for better analysis.
+- **Zero Latency Impact:** We value the performance of your applications. `dokumetry` is engineered to capture and send data without hampering your application’s speed, ensuring a seamless user experience.
 
-- **Prompt and Response Feedback:** Iterate on prompts and chat conversations directly in the UI.
+- - **Customizable Data Labeling:** Enhance your LLM analytics with customizable environment and application tags. `dokumetry` allows you to append these labels to your data, offering you the capability to sift through your observability data with ease. Drill down and view metrics in Doku, segmented by these specific tags for a more insightful analysis.
 
-- **Collaboration and Sharing:** Share results and collaborate with friends or teammates for more effective teamwork.
-
-- **Very Low Latency Impact** We know latency of your Large-Language Model usage is important to your application's success, that's why we designed Doku SDKs to impact latency as little as possible.
-
-## Installation
+## 💿 Installation
 
 ```bash
 pip install dokumetry
 ```
 
-## Quick Start ⚡️
+## ⚡️ Quick Start
 
 ### OpenAI
 
@@ -57,7 +53,7 @@ chat_completion = client.chat.completions.create(
     messages=[
         {
             "role": "user",
-            "content": "What is LLM Observability",
+            "content": "What is LLM OBservability and Monitoring?",
         }
     ],
     model="gpt-3.5-turbo",
@@ -67,23 +63,29 @@ chat_completion = client.chat.completions.create(
 ### Anthropic
 
 ```
-from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
+from anthropic import Anthropic
 import dokumetry
 
-anthropic = Anthropic(
-    # defaults to os.environ.get("ANTHROPIC_API_KEY")
-    api_key="my api key",
+client = Anthropic(
+  # This is the default and can be omitted
+  api_key="YOUR_ANTHROPIC_API_KEY",
 )
 
-# Pass the above `anthropic` object along with your Doku URL and API key and this will make sure that all Anthropic calls are automatically tracked.
-dokumetry.init(llm=anthropic, doku_url="YOUR_DOKU_URL", api_key="YOUR_DOKU_TOKEN")
+# Pass the above `client` object along with your DOKU URL and API key and this will make sure that all Anthropic calls are automatically tracked.
+dokumetry.init(llm=client, doku_url="YOUR_DOKU_URL", api_key="YOUR_DOKU_TOKEN")
 
-completion = anthropic.completions.create(
-    model="claude-2",
-    max_tokens_to_sample=300,
-    prompt=f"{HUMAN_PROMPT} What is LLM Observability?{AI_PROMPT}",
+message = client.messages.create(
+  max_tokens=1024,
+  messages=[
+      {
+          "role": "user",
+          "content": "What is LLM OBservability and Monitoring?",
+      }
+  ],
+  model="claude-3-opus-20240229",
 )
-print(completion.completion)
+print(message.content)
+
 ```
 
 ### Cohere
@@ -93,13 +95,13 @@ import cohere
 import dokumetry
 
 # initialize the Cohere Client with an API Key
-co = cohere.Client('YOUR_API_KEY')
+co = cohere.Client('YOUR_COHERE_API_KEY')
 
 # Pass the above `co` object along with your Doku URL and API key and this will make sure that all Cohere calls are automatically tracked.
 dokumetry.init(llm=co, doku_url="YOUR_DOKU_URL", api_key="YOUR_DOKU_TOKEN")
 
 # generate a prediction for a prompt
-prediction = co.chat(message='What is LLM Observability?', model='command')
+prediction = co.chat(message='What is LLM OBservability and Monitoring?', model='command')
 
 # print the predicted text
 print(f'Chatbot: {prediction.text}')
@@ -144,4 +146,4 @@ Doku Python Library (`dokumetry`) is available under the [Apache-2.0 license](LI
 
 ## Support
 
-For support, issues, or feature requests, submit an issue through the [GitHub issues](https://github.com/dokulabs/dokumetry-python/issues) associated with this repository.
+For support, issues, or feature requests, submit an issue through the [GitHub issues](https://github.com/dokulabs/doku/issues) associated with the Doku Repository and add `dokumetry-python` label.
