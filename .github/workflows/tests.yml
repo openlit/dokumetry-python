@@ -13,6 +13,7 @@ env:
   OPENAI_API_TOKEN: ${{ secrets.OPENAI_API_TOKEN }}
   COHERE_API_TOKEN: ${{ secrets.COHERE_API_TOKEN }}
   ANTHROPIC_API_TOKEN: ${{ secrets.ANTHROPIC_API_TOKEN }}
+  MISTRAL_API_TOKEN: ${{ secrets.MISTRAL_API_TOKEN }}
   DOKU_URL: http://127.0.0.1:9044
 
 jobs:
