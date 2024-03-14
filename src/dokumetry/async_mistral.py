@@ -84,7 +84,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         send_data(data, doku_url, api_key)
 
         return response
-    
+
     #pylint: disable=too-many-locals
     async def patched_chat_stream(*args, **kwargs):
         """
@@ -101,7 +101,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         async def stream_generator():
             accumulated_content = ""
             async for event in original_mistral_chat_stream(*args, **kwargs):
-                responseId = event.id
+                response_id = event.id
                 accumulated_content += event.choices[0].delta.content
                 if event.usage is not None:
                     prompt_tokens = event.usage.prompt_tokens
@@ -130,7 +130,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             prompt = " ".join(formatted_messages)
 
             data = {
-                "llmReqId": responseId,
+                "llmReqId": response_id,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
@@ -186,7 +186,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         send_data(data, doku_url, api_key)
 
         return response
- 
+
     llm.chat = patched_chat
     llm.chat_stream = patched_chat_stream
     llm.embeddings = patched_embeddings

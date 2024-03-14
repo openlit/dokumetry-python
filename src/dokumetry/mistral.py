@@ -101,7 +101,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         def stream_generator():
             accumulated_content = ""
             for event in original_mistral_chat_stream(*args, **kwargs):
-                responseId = event.id
+                response_id = event.id
                 accumulated_content += event.choices[0].delta.content
                 if event.usage is not None:
                     prompt_tokens = event.usage.prompt_tokens
@@ -130,7 +130,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             prompt = " ".join(formatted_messages)
 
             data = {
-                "llmReqId": responseId,
+                "llmReqId": response_id,
                 "environment": environment,
                 "applicationName": application_name,
                 "sourceLanguage": "python",
@@ -143,8 +143,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 "promptTokens": prompt_tokens,
                 "completionTokens": completion_tokens,
                 "totalTokens": total_tokens
-            }
-            
+            }        
 
             send_data(data, doku_url, api_key)
 
