@@ -143,7 +143,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 "promptTokens": prompt_tokens,
                 "completionTokens": completion_tokens,
                 "totalTokens": total_tokens
-            }        
+            }      
 
             send_data(data, doku_url, api_key)
 
