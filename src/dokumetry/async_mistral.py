@@ -107,6 +107,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                     prompt_tokens = event.usage.prompt_tokens
                     completion_tokens = event.usage.completion_tokens
                     total_tokens = event.usage.total_tokens
+                    finish_reason = event.choices[0].finish_reason
                 yield event
             end_time = time.time()
             duration = end_time - start_time
@@ -142,7 +143,8 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 "response": accumulated_content,
                 "promptTokens": prompt_tokens,
                 "completionTokens": completion_tokens,
-                "totalTokens": total_tokens
+                "totalTokens": total_tokens,
+                "finishReason": finish_reason
             }
 
             send_data(data, doku_url, api_key)
