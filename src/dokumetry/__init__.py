@@ -2,15 +2,14 @@
 __init__ module for dokumetry package.
 """
 from anthropic import AsyncAnthropic, Anthropic
-
 from openai import AsyncOpenAI, OpenAI
+from mistralai.async_client import MistralAsyncClient
+from mistralai.client import MistralClient
 
 from .openai import init as init_openai
 from .async_openai import init as init_async_openai
 from .anthropic import init as init_anthropic
 from .async_anthropic import init as init_async_anthropic
-from mistralai.async_client import MistralAsyncClient
-from mistralai.client import MistralClient
 from .cohere import init as init_cohere
 from .mistral import init as init_mistral
 from .async_mistral import init as init_async_mistral

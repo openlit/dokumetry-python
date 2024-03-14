@@ -56,7 +56,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 formatted_messages.append(f"{role}: {content_str}")
             else:
                 formatted_messages.append(f"{role}: {content}")
-        
+
         prompt = " ".join(formatted_messages)
         model = kwargs.get('model')
 
@@ -81,11 +81,10 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 "response": response.choices[0].message.content
         }
 
-        print(data)
-        #send_data(data, doku_url, api_key)
+        send_data(data, doku_url, api_key)
 
         return response
-    
+
     #pylint: disable=too-many-locals
     def patched_chat_stream(*args, **kwargs):
         """
@@ -127,7 +126,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                     formatted_messages.append(f"{role}: {content_str}")
                 else:
                     formatted_messages.append(f"{role}: {content}")
-            
+
             prompt = " ".join(formatted_messages)
 
             data = {
@@ -146,11 +145,11 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 "totalTokens": total_tokens
             }
             
-            print(data)
-            #send_data(data, doku_url, api_key)
+
+            send_data(data, doku_url, api_key)
 
         return stream_generator()
-    
+
     def patched_embeddings(*args, **kwargs):
         """
         Patched version of Cohere's embeddings generate method.
@@ -185,12 +184,10 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             "totalTokens": response.usage.total_tokens,
         }
 
-        print(data)
-        #send_data(data, doku_url, api_key)
+        send_data(data, doku_url, api_key)
 
         return response
 
-        
     llm.chat = patched_chat
     llm.chat_stream = patched_chat_stream
     llm.embeddings = patched_embeddings
