@@ -52,6 +52,7 @@ def init(llm, doku_url, api_key, environment="default", application_name="defaul
 
     # pylint: disable=no-else-return, line-too-long
     if hasattr(llm, 'moderations') and callable(llm.chat.completions.create) and ('.openai.azure.com/' not in str(llm.base_url)):
+        print("OpenAI")
         if isinstance(llm, OpenAI):
             init_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
         elif isinstance(llm, AsyncOpenAI):
@@ -59,14 +60,11 @@ def init(llm, doku_url, api_key, environment="default", application_name="defaul
         return
     if hasattr(llm, 'moderations') and callable(llm.chat.completions.create) and ('.openai.azure.com/' in str(llm.base_url)):
         if isinstance(llm, AzureOpenAI):
-            init_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
+            init_azure_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
         elif isinstance(llm, AsyncAzureOpenAI):
-            init_async_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
+            init_async_azure_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
         return
-    elif hasattr(llm, 'generate') and callable(llm.generate):
-        init_cohere(llm, doku_url, api_key, environment, application_name, skip_resp)
-        return
-    elif isinstance(llm, MistralClient):
+    if isinstance(llm, MistralClient):
         init_mistral(llm, doku_url, api_key, environment, application_name, skip_resp)
         return
     elif isinstance(llm, MistralAsyncClient):
@@ -77,4 +75,7 @@ def init(llm, doku_url, api_key, environment="default", application_name="defaul
         return
     elif isinstance(llm, Anthropic):
         init_anthropic(llm, doku_url, api_key, environment, application_name, skip_resp)
+        return
+    elif hasattr(llm, 'generate') and callable(llm.generate):
+        init_cohere(llm, doku_url, api_key, environment, application_name, skip_resp)
         return
