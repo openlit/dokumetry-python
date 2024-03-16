@@ -194,8 +194,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                     "response": accumulated_content,
                 }
 
-                print(data)
-                #send_data(data, doku_url, api_key)
+                send_data(data, doku_url, api_key)
 
             return stream_generator()
         else:
@@ -239,8 +238,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 data["promptTokens"] = response.usage.prompt_tokens
                 data["totalTokens"] = response.usage.total_tokens
 
-            print(data)
-            #send_data(data, doku_url, api_key)
+            send_data(data, doku_url, api_key)
 
             return response
 

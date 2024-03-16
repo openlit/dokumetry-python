@@ -66,16 +66,15 @@ def init(llm, doku_url, api_key, environment="default", application_name="defaul
     elif hasattr(llm, 'generate') and callable(llm.generate):
         init_cohere(llm, doku_url, api_key, environment, application_name, skip_resp)
         return
-    elif hasattr(llm, 'chat') and callable(llm.chat):
-        if isinstance(llm, MistralClient):
-            init_mistral(llm, doku_url, api_key, environment, application_name, skip_resp)
-        elif isinstance(llm, MistralAsyncClient):
-            init_async_mistral(llm, doku_url, api_key, environment, application_name, skip_resp)
+    elif isinstance(llm, MistralClient):
+        init_mistral(llm, doku_url, api_key, environment, application_name, skip_resp)
         return
-    elif hasattr(llm, 'messages') and callable(llm.messages.create):
-        if isinstance(llm, AsyncAnthropic):
-            init_async_anthropic(llm, doku_url, api_key, environment, application_name, skip_resp)
-        elif isinstance(llm, Anthropic):
-            init_anthropic(llm, doku_url, api_key, environment, application_name, skip_resp)
-
+    elif isinstance(llm, MistralAsyncClient):
+        init_async_mistral(llm, doku_url, api_key, environment, application_name, skip_resp)
+        return
+    elif isinstance(llm, AsyncAnthropic):
+        init_async_anthropic(llm, doku_url, api_key, environment, application_name, skip_resp)
+        return
+    elif isinstance(llm, Anthropic):
+        init_anthropic(llm, doku_url, api_key, environment, application_name, skip_resp)
         return

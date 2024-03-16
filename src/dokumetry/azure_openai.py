@@ -1,6 +1,6 @@
 # pylint: disable=duplicate-code
 """
-Module for monitoring OpenAI API calls.
+Module for monitoring Azure OpenAI API calls.
 """
 
 import time
@@ -11,10 +11,10 @@ from .__helpers import send_data
 # pylint: disable=too-many-statements
 def init(llm, doku_url, api_key, environment, application_name, skip_resp):
     """
-    Initialize OpenAI monitoring for Doku.
+    Initialize Azure OpenAI monitoring for Doku.
 
     Args:
-        llm: The OpenAI function to be patched.
+        llm: The Azure OpenAI function to be patched.
         doku_url (str): Doku URL.
         api_key (str): Doku Authentication api_key.
         environment (str): Doku environment.
@@ -29,14 +29,14 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
 
     def llm_chat_completions(*args, **kwargs):
         """
-        Patched version of OpenAI's chat completions create method.
+        Patched version of Azure OpenAI's chat completions create method.
 
         Args:
             *args: Variable positional arguments.
             **kwargs: Variable keyword arguments.
 
         Returns:
-            OpenAIResponse: The response from OpenAI's chat completions create method.
+            OpenAIResponse: The response from Azure OpenAI's chat completions create method.
         """
         is_streaming = kwargs.get('stream', False)
         start_time = time.time()
@@ -154,14 +154,14 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         
     def llm_completions(*args, **kwargs):
         """
-        Patched version of OpenAI's completions create method.
+        Patched version of Azure OpenAI's completions create method.
 
         Args:
             *args: Variable positional arguments.
             **kwargs: Variable keyword arguments.
 
         Returns:
-            OpenAIResponse: The response from OpenAI's completions create method.
+            OpenAIResponse: The response from Azure OpenAI's completions create method.
         """
         start_time = time.time()
         streaming = kwargs.get('stream', False)
@@ -194,8 +194,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                     "response": accumulated_content,
                 }
 
-                print(data)
-                #send_data(data, doku_url, api_key)
+                send_data(data, doku_url, api_key)
 
             return stream_generator()
         else:
@@ -239,21 +238,20 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 data["promptTokens"] = response.usage.prompt_tokens
                 data["totalTokens"] = response.usage.total_tokens
 
-            print(data)
-            #send_data(data, doku_url, api_key)
+            send_data(data, doku_url, api_key)
 
             return response
 
     def patched_embeddings_create(*args, **kwargs):
         """
-        Patched version of OpenAI's embeddings create method.
+        Patched version of Azure OpenAI's embeddings create method.
 
         Args:
             *args: Variable positional arguments.
             **kwargs: Variable keyword arguments.
 
         Returns:
-            OpenAIResponse: The response from OpenAI's embeddings create method.
+            OpenAIResponse: The response from Azure OpenAI's embeddings create method.
         """
 
         start_time = time.time()
@@ -282,14 +280,14 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
 
     def patched_image_create(*args, **kwargs):
         """
-        Patched version of OpenAI's images generate method.
+        Patched version of Azure OpenAI's images generate method.
 
         Args:
             *args: Variable positional arguments.
             **kwargs: Variable keyword arguments.
 
         Returns:
-            OpenAIResponse: The response from OpenAI's images generate method.
+            OpenAIResponse: The response from Azure OpenAI's images generate method.
         """
 
         start_time = time.time()
