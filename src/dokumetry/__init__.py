@@ -29,7 +29,7 @@ class DokuConfig:
     application_name = None
     skip_resp = None
 
-# pylint: disable=too-many-arguments, line-too-long
+# pylint: disable=too-many-arguments, line-too-long, too-many-return-statements
 def init(llm, doku_url, api_key, environment="default", application_name="default", skip_resp=False):
     """
     Initialize Doku configuration based on the provided function.
@@ -58,6 +58,7 @@ def init(llm, doku_url, api_key, environment="default", application_name="defaul
         elif isinstance(llm, AsyncOpenAI):
             init_async_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
         return
+    # pylint: disable=no-else-return, line-too-long
     if hasattr(llm, 'moderations') and callable(llm.chat.completions.create) and ('.openai.azure.com/' in str(llm.base_url)):
         if isinstance(llm, AzureOpenAI):
             init_azure_openai(llm, doku_url, api_key, environment, application_name, skip_resp)

@@ -151,7 +151,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             send_data(data, doku_url, api_key)
 
             return response
-        
+
     def llm_completions(*args, **kwargs):
         """
         Patched version of Azure OpenAI's completions create method.
