@@ -2,12 +2,14 @@
 __init__ module for dokumetry package.
 """
 from anthropic import AsyncAnthropic, Anthropic
-from openai import AsyncOpenAI, OpenAI
+from openai import AsyncOpenAI, OpenAI, AzureOpenAI, AsyncAzureOpenAI
 from mistralai.async_client import MistralAsyncClient
 from mistralai.client import MistralClient
 
 from .openai import init as init_openai
 from .async_openai import init as init_async_openai
+from .azure_openai import init as init_azure_openai
+from .async_azure_openai import init as init_async_azure_openai
 from .anthropic import init as init_anthropic
 from .async_anthropic import init as init_async_anthropic
 from .cohere import init as init_cohere
@@ -53,6 +55,12 @@ def init(llm, doku_url, api_key, environment="default", application_name="defaul
         if isinstance(llm, OpenAI):
             init_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
         elif isinstance(llm, AsyncOpenAI):
+            init_async_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
+        return
+    if hasattr(llm, 'moderations') and callable(llm.chat.completions.create) and ('.openai.azure.com/' in str(llm.base_url)):
+        if isinstance(llm, AzureOpenAI):
+            init_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
+        elif isinstance(llm, AsyncAzureOpenAI):
             init_async_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
         return
     elif hasattr(llm, 'generate') and callable(llm.generate):
