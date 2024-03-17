@@ -52,7 +52,6 @@ def init(llm, doku_url, api_key, environment="default", application_name="defaul
 
     # pylint: disable=no-else-return, line-too-long
     if hasattr(llm, 'moderations') and callable(llm.chat.completions.create) and ('.openai.azure.com/' not in str(llm.base_url)):
-        print("OpenAI")
         if isinstance(llm, OpenAI):
             init_openai(llm, doku_url, api_key, environment, application_name, skip_resp)
         elif isinstance(llm, AsyncOpenAI):

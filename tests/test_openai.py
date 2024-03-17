@@ -86,7 +86,7 @@ def test_fine_tuning_job_creation():
     """
     try:
         fine_tuning_job_resp = client.fine_tuning.jobs.create(
-            training_file="file-m36cc45komO83VJKAY1qVgeP",
+            training_file="file-BTkFuN0HKX3bAaOawvDtXgEe",
             model="gpt-3.5-turbo-1106"
         )
         assert fine_tuning_job_resp.object == 'fine_tuning.job'
