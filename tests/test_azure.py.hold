@@ -1,5 +1,5 @@
 """
-OpenAI Test Suite
+Azure OpenAI Test Suite
 
 This module contains a suite of tests for OpenAI functionality using the OpenAI Python library.
 It includes tests for various OpenAI API endpoints such as completions, chat completions,
@@ -12,7 +12,7 @@ validation mechanism for the integration with the Doku monitoring system.
 Global client and initialization are set up for the OpenAI client and Doku monitoring.
 
 Environment Variables:
-    - OPENAI_API_TOKEN: OpenAI API key for authentication.
+    - AZURE_OPENAI_API_TOKEN: OpenAI API key for authentication.
     - DOKU_URL: Doku URL for monitoring data submission.
     - DOKU_TOKEN: Doku authentication api_key.
 
@@ -20,43 +20,49 @@ Note: Ensure the environment variables are properly set before running the tests
 """
 
 import os
-from openai import OpenAI
+from openai import AzureOpenAI
 import dokumetry
 
 # Global client
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_TOKEN"),
+client = AzureOpenAI(
+    api_key=os.getenv("AZURE_OPENAI_API_TOKEN"),
+    api_version = "2024-02-01",
+    azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
 )
+
+azure_chat_model = os.getenv("AZURE_OPENAI_CHAT_MODEL")
+azure_embedding_model = os.getenv("AZURE_OPENAI_EMBEDDING_MODEL")
+azure_image_model = os.getenv("AZURE_OPENAI_IMAGE_MODEL")
 
 # Global initialization
 # pylint: disable=line-too-long
 dokumetry.init(llm=client, doku_url=os.getenv("DOKU_URL"), api_key=os.getenv("DOKU_TOKEN"), environment="dokumetry-testing", application_name="dokumetry-python-test", skip_resp=False)
 
-def test_completion_with_gpt_3_5_turbo_instruct():
+def test_completion():
     """
-    Test the completion with the GPT-3.5-turbo-instruct model.
+    Test the completions.
 
     Raises:
         AssertionError: If the completion response object is not as expected.
     """
 
     completions_resp = client.completions.create(
-        model="gpt-3.5-turbo-instruct",
+        model=azure_chat_model,
         prompt="Hello world",
         max_tokens=100
     )
     assert completions_resp.object == 'text_completion'
 
-def test_chat_completion_with_gpt_3_5_turbo():
+def test_chat_completion():
     """
-    Test chat completion with the GPT-3.5-turbo model.
+    Test chat completions.
 
     Raises:
         AssertionError: If the chat completion response object is not as expected.
     """
 
     chat_completions_resp = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model=azure_chat_model,
         max_tokens=100,
         messages=[{"role": "user", "content": "What is Grafana?"}]
     )
@@ -71,32 +77,11 @@ def test_embedding_creation():
     """
 
     embeddings_resp = client.embeddings.create(
-        model="text-embedding-ada-002",
+        model=azure_embedding_model,
         input="The quick brown fox jumped over the lazy dog",
         encoding_format="float"
     )
     assert embeddings_resp.data[0].object == 'embedding'
-
-def test_fine_tuning_job_creation():
-    """
-    Test fine-tuning job creation.
-
-    Raises:
-        AssertionError: If the fine-tuning job response object is not as expected.
-    """
-    try:
-        fine_tuning_job_resp = client.fine_tuning.jobs.create(
-            training_file="file-BTkFuN0HKX3bAaOawvDtXgEe",
-            model="gpt-3.5-turbo-1106"
-        )
-        assert fine_tuning_job_resp.object == 'fine_tuning.job'
-
-    #pylint: disable=broad-exception-caught
-    except Exception as e:
-        if 'rate_limit_exceeded' in str(e):
-            error_json = e.response.json()
-            rate_limit_code = error_json['error']['code']
-            print(rate_limit_code)
 
 def test_image_generation():
     """
@@ -107,37 +92,8 @@ def test_image_generation():
     """
 
     image_generation_resp = client.images.generate(
-        model='dall-e-2',
-        prompt='Generate an image of a cat.',
+        model=azure_chat_model,
+        prompt='Generate an image for LLM Observability Dashboard',
         n=1
     )
     assert image_generation_resp.created is not None
-
-def test_image_variation_creation():
-    """
-    Test image variation creation.
-
-    Raises:
-        AssertionError: If the image variation response created timestamp is not present.
-    """
-    # pylint: disable=consider-using-with
-    image_variation_resp = client.images.create_variation(
-        image=open("tests/test-image-for-openai.png", "rb"),
-        n=1,
-        size="1024x1024"
-    )
-    assert image_variation_resp.created is not None
-
-def test_audio_speech_generation():
-    """
-    Test audio speech generation.
-
-    Raises:
-        AssertionError: If the audio speech response is not present or not an instance of an object.
-    """
-
-    audio_speech_resp = client.audio.speech.create(
-        model='tts-1',
-        voice='alloy',
-        input='Today is a wonderful day to build something people love!')
-    assert audio_speech_resp is not None and isinstance(audio_speech_resp, object)

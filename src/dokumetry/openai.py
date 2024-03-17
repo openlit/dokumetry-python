@@ -48,11 +48,12 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             def stream_generator():
                 accumulated_content = ""
                 for chunk in original_chat_create(*args, **kwargs):
-                    #pylint: disable=line-too-long
-                    if hasattr(chunk.choices[0], 'delta') and hasattr(chunk.choices[0].delta, 'content'):
-                        content = chunk.choices[0].delta.content
-                        if content:
-                            accumulated_content += content
+                    if len(chunk.choices) > 0:
+                        #pylint: disable=line-too-long
+                        if hasattr(chunk.choices[0], 'delta') and hasattr(chunk.choices[0].delta, 'content'):
+                            content = chunk.choices[0].delta.content
+                            if content:
+                                accumulated_content += content
                     yield chunk
                     response_id = chunk.id
                 end_time = time.time()
@@ -170,11 +171,12 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         if streaming:
             def stream_generator():
                 accumulated_content = ""
-                for chunk in original_chat_create(*args, **kwargs):
-                    if hasattr(chunk.choices[0].text, 'content'):
-                        content = chunk.choices[0].text
-                        if content:
-                            accumulated_content += content
+                for chunk in original_completions_create(*args, **kwargs):
+                    if len(chunk.choices) > 0:
+                        if hasattr(chunk.choices[0], 'text'):
+                            content = chunk.choices[0].text
+                            if content:
+                                accumulated_content += content
                     yield chunk
                     response_id = chunk.id
                 end_time = time.time()
@@ -258,7 +260,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
         end_time = time.time()
         duration = end_time - start_time
         model = kwargs.get('model', "No Model provided")
-        prompt = kwargs.get('input', "No prompt provided")
+        prompt = ', '.join(kwargs.get('input', []))
 
         data = {
             "environment": environment,
