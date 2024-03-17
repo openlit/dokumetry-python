@@ -19,6 +19,7 @@
 - ✅ Anthropic
 - ✅ Cohere
 - ✅ Mistral
+- ✅ Azure OpenAI
 
 Deployed as the backbone for all your LLM monitoring needs, `dokumetry` channels crucial usage data directly to Doku, streamlining the tracking process. Unlock efficient and effective observability for your LLM applications with DokuMetry.
 
