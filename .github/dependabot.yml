@@ -1,8 +1,7 @@
 version: 2
 updates:
-  # Existing config for the src/ directory
+  # Existing config for the root directory
   - package-ecosystem: "pip"
-    directory: "src/"
     schedule:
       interval: "weekly"
   # Add this for the tests/ directory
