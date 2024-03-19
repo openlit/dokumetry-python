@@ -1,11 +1,5 @@
 version: 2
 updates:
-  # Existing config for the root directory
-  - package-ecosystem: "pip"
-    schedule:
-      interval: "weekly"
-  # Add this for the tests/ directory
-  - package-ecosystem: "pip"
-    directory: "/tests"
-    schedule:
-      interval: "weekly"
+- package-ecosystem: "pip"
+  schedule:
+    interval: "weekly"
