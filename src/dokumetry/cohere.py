@@ -93,8 +93,9 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             duration = end_time - start_time
             model = kwargs.get('model', 'command')
             prompt = kwargs.get('prompt')
-
-            for generation in response:
+            promptTokens = response.meta.billed_units.input_tokens
+            completionTokens = response.meta.billed_units.output_tokens
+            for generation in response.generations:
                 data = {
                     "llmReqId": generation.id,
                     "environment": environment,
@@ -103,8 +104,8 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                     "endpoint": "cohere.generate",
                     "skipResp": skip_resp,
                     "finishReason": generation.finish_reason,
-                    "completionTokens": count_tokens(generation.text),
-                    "promptTokens": count_tokens(prompt),
+                    "completionTokens": completionTokens,
+                    "promptTokens": promptTokens,
                     "requestDuration": duration,
                     "model": model,
                     "prompt": prompt,
@@ -144,7 +145,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             "requestDuration": duration,
             "model": model,
             "prompt": prompt,
-            "promptTokens": response.meta["billed_units"]["input_tokens"],
+            "promptTokens": response.meta.billed_units.input_tokens,
         }
 
         send_data(data, doku_url, api_key)
@@ -218,7 +219,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 "totalTokens": response.token_count["billed_tokens"],
                 "response": response.text
             }
-
+            
             send_data(data, doku_url, api_key)
 
             return response
@@ -250,8 +251,8 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 "endpoint": "cohere.summarize",
                 "skipResp": skip_resp,
                 "requestDuration": duration,
-                "completionTokens": response.meta["billed_units"]["output_tokens"],
-                "promptTokens": response.meta["billed_units"]["input_tokens"],
+                "completionTokens": response.meta.billed_units.output_tokens,
+                "promptTokens": response.meta.billed_units.input_tokens,
                 "model": model,
                 "prompt": prompt,
                 "response": response.summary
