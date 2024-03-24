@@ -48,7 +48,7 @@ def test_messages():
                     "content": "Hello, Claude",
                 }
             ],
-            model="claude-3-opus-20240229",
+            model="claude-3-haiku-20240307",
         )
         assert message.type == 'message'
 
