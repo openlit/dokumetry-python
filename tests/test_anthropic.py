@@ -52,6 +52,7 @@ def test_messages():
         )
         assert message.type == 'message'
 
+    # pylint: disable=broad-exception-caught
     except Exception as e:
         if "rate limit" in str(e).lower():
             print("Rate Limited:", e)
