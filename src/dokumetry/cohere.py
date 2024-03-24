@@ -27,8 +27,7 @@ def count_tokens(text):
     return num_tokens
 
 # pylint: disable=too-many-arguments, too-many-statements
-# pylint: disable=too-many-locals
-def init(llm, doku_url, api_key, environment, application_name, skip_resp):
+def init(llm, doku_url, api_key, environment, application_name, skip_resp): #pylint: disable=too-many-locals
     """
     Initialize Cohere monitoring for Doku.
 
