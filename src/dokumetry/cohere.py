@@ -26,7 +26,7 @@ def count_tokens(text):
 
     return num_tokens
 
-# pylint: disable=too-many-arguments, too-many-statements
+# pylint: disable=too-many-arguments, too-many-statements, too-many-locals
 def init(llm, doku_url, api_key, environment, application_name, skip_resp):
     """
     Initialize Cohere monitoring for Doku.
@@ -94,8 +94,8 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             duration = end_time - start_time
             model = kwargs.get('model', 'command')
             prompt = kwargs.get('prompt')
-            promptTokens = response.meta.billed_units.input_tokens
-            completionTokens = response.meta.billed_units.output_tokens
+            prompt_tokens = response.meta.billed_units.input_tokens
+            completion_tokens = response.meta.billed_units.output_tokens
             for generation in response.generations:
                 data = {
                     "llmReqId": generation.id,
@@ -105,8 +105,8 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                     "endpoint": "cohere.generate",
                     "skipResp": skip_resp,
                     "finishReason": generation.finish_reason,
-                    "completionTokens": completionTokens,
-                    "promptTokens": promptTokens,
+                    "completionTokens": completion_tokens,
+                    "promptTokens": prompt_tokens,
                     "requestDuration": duration,
                     "model": model,
                     "prompt": prompt,
@@ -220,7 +220,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 "totalTokens": response.token_count["billed_tokens"],
                 "response": response.text
             }
-            
+
             send_data(data, doku_url, api_key)
 
             return response
