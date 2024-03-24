@@ -48,6 +48,7 @@ def test_chat():
     message = client.chat(
         model="mistral-large-latest",
         messages=messages,
+        max_tokens=10,
     )
     assert message.object == 'chat.completion'
 
