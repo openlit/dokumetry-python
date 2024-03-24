@@ -41,7 +41,7 @@ def test_messages():
     """
     try:
         message = client.messages.create(
-            max_tokens=10,
+            max_tokens=1,
             messages=[
                 {
                     "role": "user",
