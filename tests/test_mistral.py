@@ -46,8 +46,9 @@ def test_chat():
 
     # No streaming
     message = client.chat(
-        model="mistral-large-latest",
+        model="open-mistral-7b",
         messages=messages,
+        max_tokens=1,
     )
     assert message.object == 'chat.completion'
 

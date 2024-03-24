@@ -30,5 +30,4 @@ def send_data(data, doku_url, doku_token):
                                  timeout=30)
         response.raise_for_status()
     except requests.exceptions.RequestException as req_err:
-        logging.error("Error sending data to Doku: %s", req_err)
-        raise  # Re-raise the exception after logging
+        logging.error("DokuMetry: Error sending data to Doku: %s", req_err)

@@ -27,7 +27,7 @@ def count_tokens(text):
     return num_tokens
 
 # pylint: disable=too-many-arguments, too-many-statements
-def init(llm, doku_url, api_key, environment, application_name, skip_resp):
+def init(llm, doku_url, api_key, environment, application_name, skip_resp): #pylint: disable=too-many-locals
     """
     Initialize Cohere monitoring for Doku.
 
@@ -43,6 +43,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
     original_generate = llm.generate
     original_embed = llm.embed
     original_chat = llm.chat
+    original_chat_stream = llm.chat_stream
     original_summarize = llm.summarize
 
     def patched_generate(*args, **kwargs):
@@ -93,8 +94,9 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             duration = end_time - start_time
             model = kwargs.get('model', 'command')
             prompt = kwargs.get('prompt')
-
-            for generation in response:
+            prompt_tokens = response.meta.billed_units.input_tokens
+            completion_tokens = response.meta.billed_units.output_tokens
+            for generation in response.generations:
                 data = {
                     "llmReqId": generation.id,
                     "environment": environment,
@@ -103,8 +105,8 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                     "endpoint": "cohere.generate",
                     "skipResp": skip_resp,
                     "finishReason": generation.finish_reason,
-                    "completionTokens": count_tokens(generation.text),
-                    "promptTokens": count_tokens(prompt),
+                    "completionTokens": completion_tokens,
+                    "promptTokens": prompt_tokens,
                     "requestDuration": duration,
                     "model": model,
                     "prompt": prompt,
@@ -144,7 +146,7 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
             "requestDuration": duration,
             "model": model,
             "prompt": prompt,
-            "promptTokens": response.meta["billed_units"]["input_tokens"],
+            "promptTokens": response.meta.billed_units.input_tokens,
         }
 
         send_data(data, doku_url, api_key)
@@ -223,6 +225,56 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
 
             return response
 
+    #pylint: disable=too-many-locals
+    def patched_chat_stream(*args, **kwargs):
+        """
+        Patched version of Cohere's chat_stream method.
+
+        Args:
+            *args: Variable positional arguments.
+            **kwargs: Variable keyword arguments.
+
+        Returns:
+            CohereResponse: The response from Cohere's chat_stream.
+        """
+        start_time = time.time()
+        def stream_generator():
+            accumulated_content = ""
+            for event in original_chat_stream(*args, **kwargs):
+                if event.event_type == "stream-end":
+                    accumulated_content = event.response.text
+                    response_id = event.response.response_id
+                    prompt_tokens = event.response.meta["billed_units"]["input_tokens"]
+                    completion_tokens = event.response.meta["billed_units"]["output_tokens"]
+                    total_tokens = event.response.token_count["billed_tokens"]
+                    finish_reason = event.finish_reason
+                yield event
+            end_time = time.time()
+            duration = end_time - start_time
+            prompt = kwargs.get('message', "No prompt provided")
+
+            data = {
+                "llmReqId": response_id,
+                "environment": environment,
+                "applicationName": application_name,
+                "sourceLanguage": "python",
+                "endpoint": "cohere.chat",
+                "skipResp": skip_resp,
+                "requestDuration": duration,
+                "model": kwargs.get('model', "command"),
+                "prompt": prompt,
+                "response": accumulated_content,
+                "promptTokens": prompt_tokens,
+                "completionTokens": completion_tokens,
+                "totalTokens": total_tokens,
+                "finishReason": finish_reason
+            }
+
+            send_data(data, doku_url, api_key)
+
+        return stream_generator()
+
+
     def summarize_generate(*args, **kwargs):
         """
         Patched version of Cohere's summarize generate method.
@@ -250,8 +302,8 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
                 "endpoint": "cohere.summarize",
                 "skipResp": skip_resp,
                 "requestDuration": duration,
-                "completionTokens": response.meta["billed_units"]["output_tokens"],
-                "promptTokens": response.meta["billed_units"]["input_tokens"],
+                "completionTokens": response.meta.billed_units.output_tokens,
+                "promptTokens": response.meta.billed_units.input_tokens,
                 "model": model,
                 "prompt": prompt,
                 "response": response.summary
@@ -265,4 +317,5 @@ def init(llm, doku_url, api_key, environment, application_name, skip_resp):
     llm.generate = patched_generate
     llm.embed = embeddings_generate
     llm.chat = chat_generate
+    llm.chat_stream = patched_chat_stream
     llm.summarize = summarize_generate

@@ -68,7 +68,7 @@ def test_summarize():
         )
         assert summarize_resp.id is not None
 
-    except cohere.error.CohereAPIError as e:
+    except cohere.core.api_error.ApiError as e:
         print("Rate Limited:", e)
 
 def test_generate_with_prompt():
@@ -82,7 +82,7 @@ def test_generate_with_prompt():
         )
         assert generate_resp.prompt == 'Doku'
 
-    except cohere.error.CohereAPIError as e:
+    except cohere.core.api_error.ApiError as e:
         print("Rate Limited:", e)
 
 def test_embed():
@@ -95,7 +95,7 @@ def test_embed():
         )
         assert embeddings_resp.meta is not None
 
-    except cohere.error.CohereAPIError as e:
+    except cohere.core.api_error.ApiError as e:
         print("Rate Limited:", e)
 
 def test_chat():
@@ -109,5 +109,5 @@ def test_chat():
         )
         assert chat_resp.response_id is not None
 
-    except cohere.error.CohereAPIError as e:
+    except cohere.core.api_error.ApiError as e:
         print("Rate Limited:", e)
