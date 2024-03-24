@@ -53,4 +53,5 @@ def test_messages():
         assert message.type == 'message'
 
     except Exception as e:
-        print(e)
+        if "rate limit" in str(e).lower():
+            print("Rate Limited:", e)
