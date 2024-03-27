@@ -58,7 +58,7 @@ def test_chat_completion_with_gpt_3_5_turbo():
     chat_completions_resp = client.chat.completions.create(
         model="gpt-3.5-turbo",
         max_tokens=1,
-        messages=[{"role": "user", "content": "What is Grafana?"}]
+        messages=[{"role": "user", "content": "What is LLM Observability?"}]
     )
     assert chat_completions_resp.object == 'chat.completion'
 
