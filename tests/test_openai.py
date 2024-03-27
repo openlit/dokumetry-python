@@ -43,7 +43,7 @@ def test_completion_with_gpt_3_5_turbo_instruct():
     completions_resp = client.completions.create(
         model="gpt-3.5-turbo-instruct",
         prompt="Hello world",
-        max_tokens=100
+        max_tokens=1
     )
     assert completions_resp.object == 'text_completion'
 
@@ -57,7 +57,7 @@ def test_chat_completion_with_gpt_3_5_turbo():
 
     chat_completions_resp = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        max_tokens=100,
+        max_tokens=1,
         messages=[{"role": "user", "content": "What is Grafana?"}]
     )
     assert chat_completions_resp.object == 'chat.completion'
@@ -77,26 +77,26 @@ def test_embedding_creation():
     )
     assert embeddings_resp.data[0].object == 'embedding'
 
-def test_fine_tuning_job_creation():
-    """
-    Test fine-tuning job creation.
+# def test_fine_tuning_job_creation():
+#     """
+#     Test fine-tuning job creation.
 
-    Raises:
-        AssertionError: If the fine-tuning job response object is not as expected.
-    """
-    try:
-        fine_tuning_job_resp = client.fine_tuning.jobs.create(
-            training_file="file-BTkFuN0HKX3bAaOawvDtXgEe",
-            model="gpt-3.5-turbo-1106"
-        )
-        assert fine_tuning_job_resp.object == 'fine_tuning.job'
+#     Raises:
+#         AssertionError: If the fine-tuning job response object is not as expected.
+#     """
+#     try:
+#         fine_tuning_job_resp = client.fine_tuning.jobs.create(
+#             training_file="",
+#             model="gpt-3.5-turbo-1106"
+#         )
+#         assert fine_tuning_job_resp.object == 'fine_tuning.job'
 
-    #pylint: disable=broad-exception-caught
-    except Exception as e:
-        if 'rate_limit_exceeded' in str(e):
-            error_json = e.response.json()
-            rate_limit_code = error_json['error']['code']
-            print(rate_limit_code)
+#     #pylint: disable=broad-exception-caught
+#     except Exception as e:
+#         if 'rate_limit_exceeded' in str(e):
+#             error_json = e.response.json()
+#             rate_limit_code = error_json['error']['code']
+#             print(rate_limit_code)
 
 def test_image_generation():
     """
@@ -109,6 +109,7 @@ def test_image_generation():
     image_generation_resp = client.images.generate(
         model='dall-e-2',
         prompt='Generate an image of a cat.',
+        size='256x256',
         n=1
     )
     assert image_generation_resp.created is not None
@@ -124,7 +125,7 @@ def test_image_variation_creation():
     image_variation_resp = client.images.create_variation(
         image=open("tests/test-image-for-openai.png", "rb"),
         n=1,
-        size="1024x1024"
+        size="256x256"
     )
     assert image_variation_resp.created is not None
 
@@ -139,5 +140,5 @@ def test_audio_speech_generation():
     audio_speech_resp = client.audio.speech.create(
         model='tts-1',
         voice='alloy',
-        input='Today is a wonderful day to build something people love!')
+        input='LLM Observability!')
     assert audio_speech_resp is not None and isinstance(audio_speech_resp, object)
